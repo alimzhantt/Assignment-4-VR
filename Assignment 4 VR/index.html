@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PA4 – A-Frame VR Scene – 241177</title>
+  <!-- A-Frame 1.8.0 -->
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+  <!-- Custom components and system (loaded after A-Frame, before the scene) -->
+  <script src="components.js"></script>
+  <style>body { margin: 0; overflow: hidden; }</style>
+</head>
+<body>
+  <a-scene fog="type: linear; color: #d0e1f9; near: 4; far: 30"
+           renderer="antialias: true; colorManagement: true" stats>
+    <a-assets>
+      <!-- Own procedurally generated textures, CC0 (see README) -->
+      <img id="snow-ground" src="textures/snow.jpg">
+      <img id="ice-texture" src="textures/ice.jpg">
+      <img id="sky-winter" src="textures/sky.jpg">
+    </a-assets>
+
+    <!-- Environment -->
+    <a-sky src="#sky-winter" color="#ffffff"></a-sky>
+
+    <!-- Ground: generic entity + custom texture, repeat 10 x 10 -->
+    <a-entity id="ground"
+              geometry="primitive: plane; width: 40; height: 40"
+              rotation="-90 0 0"
+              x1177-texture="src: #snow-ground; repeat: 10 10; anisotropy: 8"></a-entity>
+
+    <!-- Lighting -->
+    <a-entity light="type: ambient; color: #e6f2ff; intensity: 0.7"></a-entity>
+    <a-entity light="type: directional; color: #ffffff; intensity: 1.0" position="-3 10 5"></a-entity>
+
+    <!-- Camera rig: camera at 1.6 m, WASD on the rig, mouse cursor + lasers -->
+    <a-entity id="rig" position="0 0 6" wasd-controls="acceleration: 25">
+      <a-entity id="camera" camera look-controls position="0 1.6 0"
+                cursor="rayOrigin: mouse" raycaster="objects: .exhibit > *; far: 30"></a-entity>
+      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: .exhibit > *; far: 30"></a-entity>
+      <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: .exhibit > *; far: 30"></a-entity>
+    </a-entity>
+
+    <!-- Student info panel -->
+    <a-entity id="info-panel" position="0 3.4 0" rotation="8 0 0">
+      <a-plane width="4" height="1.1" color="#1a2634" opacity="0.88"></a-plane>
+      <a-text value="ID: 241177 | Variant: Winter Steppe (x1177-)" align="center" position="0 0.3 0.01" width="3.8" wrap-count="44" color="#ffffff"></a-text>
+      <a-text value="Layout: Corridor | Motion: Orbit | Point-and-click" align="center" position="0 0.03 0.01" width="3.8" wrap-count="54" color="#a0c4ff"></a-text>
+      <a-text id="gallery-counter" value="Selected: None (0 of 6)" align="center" position="0 -0.28 0.01" width="3.8" wrap-count="40" color="#ffea00"></a-text>
+    </a-entity>
+
+    <!-- Corridor: two rows of 3 (x = -1.5 / +1.5 -> 3 m apart), z = 3 .. -7 (10 m) -->
+    <!-- Left row -->
+    <a-entity id="ex1" class="exhibit" position="-1.5 0 3"
+              x1177-motion="type: orbit; amplitude: 0.4; period: 4; phase: 0.0"
+              x1177-exhibit="name: Ice Crystal Pillar; info: A glowing frozen monolith of the North Steppe.">
+      <!-- generic entity with geometry + material (not a primitive tag) -->
+      <a-entity geometry="primitive: octahedron; radius: 0.6" position="0 1.2 0"
+                material="color: #bfe9f5; metalness: 0.1; roughness: 0.3"
+                x1177-texture="src: #ice-texture; repeat: 1 1; anisotropy: 8"></a-entity>
+      <a-entity geometry="primitive: cylinder; radius: 0.35; height: 0.5" position="0 0.25 0"
+                material="color: #8fb8c9; roughness: 0.6"></a-entity>
+    </a-entity>
+
+    <a-entity id="ex2" class="exhibit" position="-1.5 0 -2"
+              x1177-motion="type: orbit; amplitude: 0.5; period: 3.5; phase: 1.05"
+              x1177-exhibit="name: Steppe Yurt Frame; info: Traditional nomadic shelter built for snow storms.">
+      <a-cone color="#e8d5b7" radius-bottom="0.8" radius-top="0.1" height="0.9" position="0 0.85 0"></a-cone>
+      <a-cylinder color="#8c6d46" radius="0.8" height="0.4" position="0 0.2 0"></a-cylinder>
+    </a-entity>
+
+    <a-entity id="ex3" class="exhibit" position="-1.5 0 -7"
+              x1177-motion="type: orbit; amplitude: 0.3; period: 5; phase: 2.09"
+              x1177-exhibit="name: Balbal Snow Idol; info: Ancient stone figure covered in winter frost.">
+      <a-cylinder color="#d6e6f2" radius="0.3" height="1.2" position="0 0.6 0"></a-cylinder>
+      <a-sphere color="#b9d7ea" radius="0.35" position="0 1.4 0"></a-sphere>
+    </a-entity>
+
+    <!-- Right row -->
+    <a-entity id="ex4" class="exhibit" position="1.5 0 3"
+              x1177-motion="type: orbit; amplitude: 0.45; period: 4.5; phase: 3.14"
+              x1177-exhibit="name: Golden Eagle Totem; info: Sacred bird sculpture watching over the frozen steppe.">
+      <a-box color="#b8924b" depth="0.4" height="1.0" width="0.4" position="0 0.5 0"></a-box>
+      <a-tetrahedron color="#ffd700" radius="0.5" position="0 1.3 0"></a-tetrahedron>
+    </a-entity>
+
+    <a-entity id="ex5" class="exhibit" position="1.5 0 -2"
+              x1177-motion="type: orbit; amplitude: 0.35; period: 3.8; phase: 4.19"
+              x1177-exhibit="name: Frost Shimmer Beacon; info: Beacon lighting the nomadic winter trade routes.">
+      <a-torus-knot color="#a8d8ea" radius="0.4" radius-tubular="0.08" position="0 1.1 0"></a-torus-knot>
+    </a-entity>
+
+    <a-entity id="ex6" class="exhibit" position="1.5 0 -7"
+              x1177-motion="type: orbit; amplitude: 0.5; period: 4.2; phase: 5.24"
+              x1177-exhibit="name: Snow Mound Relic; info: Artifact buried under deep snow drifts.">
+      <a-dodecahedron color="#f0f8ff" radius="0.55" position="0 0.7 0"></a-dodecahedron>
+    </a-entity>
+  </a-scene>
+</body>
+</html>
